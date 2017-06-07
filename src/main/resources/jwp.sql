@@ -19,6 +19,7 @@ CREATE TABLE QUESTIONS (
 	title				varchar(50)			NOT NULL,
 	contents			varchar(5000)		NOT NULL,
 	createdDate			timestamp			NOT NULL,
+	deleted 			boolean 			NOT NULL 	default false,
 	countOfAnswer int,
 	PRIMARY KEY               (questionId)
 );
@@ -30,7 +31,8 @@ CREATE TABLE ANSWERS (
 	writer				varchar(30)			NOT NULL,
 	contents			varchar(5000)		NOT NULL,
 	createdDate			timestamp			NOT NULL,
-	questionId			bigint				NOT NULL,				
+	questionId			bigint				NOT NULL,
+	deleted 			boolean 			NOT NULL 	default false,		
 	PRIMARY KEY         (answerId)
 );
 

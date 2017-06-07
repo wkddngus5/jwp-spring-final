@@ -18,6 +18,8 @@ public class Question {
 	private Date createdDate;
 
 	private int countOfComment;
+	
+	private boolean deleted = false;
 
 	public Question() {
 	}

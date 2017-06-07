@@ -34,6 +34,7 @@ public class QnaService {
 	}
 
 	public void deleteQuestion(long questionId, User user) throws CannotOperateException {
+	    // TODO 삭제 기능을 구현한다.
 	}
 
 	public void updateQuestion(long questionId, Question newQuestion, User user) throws CannotOperateException {
