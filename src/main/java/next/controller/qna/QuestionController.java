@@ -49,14 +49,15 @@ public class QuestionController {
 	}
 
 	@RequestMapping(value = "/{questionId}", method = RequestMethod.POST)
-	public String create(@LoginUser User loginUser, @PathVariable long questionId, Question question) throws Exception {
+	public String create(@LoginUser User loginUser, @PathVariable long questionId, Question newQuestion) throws Exception {
 		if (loginUser.isGuestUser()) {
 			return "redirect:/users/loginForm";
 		}
 		if(questionId == 0) {
-			questionDao.insert(question.newQuestion(loginUser));			
+			questionDao.insert(newQuestion.newQuestion(loginUser));			
 		}else {
-			questionDao.update(question);
+			qnaService.updateQuestion(questionId, newQuestion, loginUser);
+			question.update(question);
 		}
 		return "redirect:/";
 	}

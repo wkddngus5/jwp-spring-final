@@ -34,7 +34,15 @@ public class QnaService {
 	}
 
 	public void deleteQuestion(long questionId, User user) throws CannotOperateException {
-	    // TODO 삭제 기능을 구현한다.
+		Question question = questionDao.findById(questionId);
+        if (question == null) {
+        	throw new EmptyResultDataAccessException("존재하지 않는 질문입니다.", 1);
+        }
+        
+        if (!question.isSameUser(user)) {
+            throw new CannotOperateException("다른 사용자가 쓴 글을 수정할 수 없습니다.");
+        }
+        questionDao.delete(questionId);
 	}
 
 	public void updateQuestion(long questionId, Question newQuestion, User user) throws CannotOperateException {
@@ -49,5 +57,18 @@ public class QnaService {
         
         question.update(newQuestion);
         questionDao.update(question);
+	}
+
+	public void deleteAnswer(long answerId, User loginUser) throws CannotOperateException {
+		Answer answer = answerDao.findById(answerId);
+		if (answer == null) {
+			throw new EmptyResultDataAccessException("존재하지 않는 질문입니다.", 1);
+		}
+		
+		if (!answer.isSameUser(loginUser)) {
+			throw new CannotOperateException("다른 사용자가 쓴 글을 수정할 수 없습니다.");
+		}
+		answerDao.delete(answerId);
+		questionDao.minusCountOfAnswer(answer.getQuestionId());
 	}
 }

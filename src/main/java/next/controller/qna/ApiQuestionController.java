@@ -56,10 +56,20 @@ public class ApiQuestionController {
     	Map<String, Object> values = Maps.newHashMap();
     	Answer answer = new Answer(loginUser.getUserId(), contents, questionId);
     	Answer savedAnswer = answerDao.insert(answer);
-		questionDao.updateCountOfAnswer(savedAnswer.getQuestionId());
+		questionDao.plusCountOfAnswer(savedAnswer.getQuestionId());
 		
 		values.put("answer", savedAnswer);
 		values.put("result", Result.ok());
 		return values;
+	}
+	
+	@RequestMapping(value="/{questionId}/answers/{answerId}", method=RequestMethod.DELETE)
+	public Result deleteAnswer(@LoginUser User loginUser, @PathVariable long questionId, @PathVariable long answerId) throws Exception {
+		try {
+			qnaService.deleteAnswer(answerId, loginUser);
+			return Result.ok();
+		} catch (CannotOperateException e) {
+			return Result.fail(e.getMessage());
+		}
 	}
 }

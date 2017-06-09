@@ -24,7 +24,6 @@
             <form:textarea path="contents" rows="5"
               cssClass="form-control" value="${question.contents}" />
           </div>
-          <p>${question.questionId}</p>
           <c:choose>
             <c:when test="${question.questionId eq '0'}">
               <button type="submit" class="btn btn-success clearfix pull-right">질문하기</button>

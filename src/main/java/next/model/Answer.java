@@ -2,7 +2,12 @@ package next.model;
 
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Answer {
+	private static final Logger log = LoggerFactory.getLogger(Answer.class);
+
 	private long answerId;
 	
 	private String writer;
