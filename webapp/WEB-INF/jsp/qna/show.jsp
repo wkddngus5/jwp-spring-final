@@ -14,7 +14,7 @@
 		<div class="panel panel-default">
 			<c:if test="${not empty errorMessage}">
             <div class="alert alert-danger" role="alert">${errorMessage}</div>
-            </c:if>		
+      </c:if>
 			<header class="qna-header">
 				<h2 class="qna-title">${question.title}</h2>
 			</header>

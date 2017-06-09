@@ -48,12 +48,16 @@ public class QuestionController {
 		return "/qna/form";
 	}
 
-	@RequestMapping(value = "", method = RequestMethod.POST)
-	public String create(@LoginUser User loginUser, Question question) throws Exception {
+	@RequestMapping(value = "/{questionId}", method = RequestMethod.POST)
+	public String create(@LoginUser User loginUser, @PathVariable long questionId, Question question) throws Exception {
 		if (loginUser.isGuestUser()) {
 			return "redirect:/users/loginForm";
 		}
-		questionDao.insert(question.newQuestion(loginUser));
+		if(questionId == 0) {
+			questionDao.insert(question.newQuestion(loginUser));			
+		}else {
+			questionDao.update(question);
+		}
 		return "redirect:/";
 	}
 
@@ -67,5 +71,14 @@ public class QuestionController {
 			model.addAttribute("errorMessage", e.getMessage());
 			return "show";
 		}
+	}
+	
+	@RequestMapping(value = "/{questionId}/edit", method = RequestMethod.GET)
+	public String edit(@LoginUser User loginUser, @PathVariable long questionId, Model model) throws Exception {
+		if (loginUser.isGuestUser()) {
+			return "redirect:/users/loginForm";
+		}
+		model.addAttribute("question", qnaService.findById(questionId));
+		return "/qna/form";
 	}
 }
