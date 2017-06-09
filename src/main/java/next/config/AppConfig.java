@@ -1,5 +1,7 @@
 package next.config;
 
+import java.beans.PropertyVetoException;
+
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -16,26 +18,26 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+
 @Configuration
-@ComponentScan(
-	basePackages = { "next.controller", "next.service", "next.support", "next.dao" },
-	excludeFilters = @ComponentScan.Filter(value = Controller.class, type = FilterType.ANNOTATION)
-)
+@ComponentScan(basePackages = { "next.controller", "next.service", "next.support",
+		"next.dao" }, excludeFilters = @ComponentScan.Filter(value = Controller.class, type = FilterType.ANNOTATION))
 @PropertySource("classpath:application.properties")
-@EnableAspectJAutoProxy(proxyTargetClass=true)
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 public class AppConfig {
 	@Value("${db.driver.class}")
 	private String driverClass;
-	
+
 	@Value("${db.url}")
 	private String url;
-	
+
 	@Value("${db.username}")
 	private String username;
-	
+
 	@Value("${db.password}")
 	private String password;
-	
+
 	@Bean
 	public DataSource dataSource() {
 		BasicDataSource ds = new BasicDataSource();
@@ -45,23 +47,33 @@ public class AppConfig {
 		ds.setPassword(password);
 		return ds;
 	}
-	
+
+	@Bean
+	public ComboPooledDataSource combopooledDataSource() throws PropertyVetoException {
+		ComboPooledDataSource cpds = new ComboPooledDataSource();
+		cpds.setDriverClass(driverClass); // loads the jdbc driver
+		cpds.setJdbcUrl(url);
+		cpds.setUser(username);
+		cpds.setPassword(password);
+		return cpds;
+	}
+
 	@Bean
 	public JdbcTemplate jdbcTemplate(DataSource dataSource) {
 		return new JdbcTemplate(dataSource);
 	}
-	
+
 	@Bean
-    public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
-        return new PropertySourcesPlaceholderConfigurer();
-    }
-	
+	public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
+		return new PropertySourcesPlaceholderConfigurer();
+	}
+
 	@Bean
 	public MessageSource messageSource() {
-	    ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-	    messageSource.setBasename("classpath:messages");
-	    messageSource.setDefaultEncoding("UTF-8");
-	    messageSource.setCacheSeconds(30);
-	    return messageSource;
+		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+		messageSource.setBasename("classpath:messages");
+		messageSource.setDefaultEncoding("UTF-8");
+		messageSource.setCacheSeconds(30);
+		return messageSource;
 	}
 }
