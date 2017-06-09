@@ -37,6 +37,8 @@ public class ApiQuestionController {
 	
 	@RequestMapping(value="/{questionId}", method=RequestMethod.DELETE)
 	public Result deleteQuestion(@LoginUser User loginUser, @PathVariable long questionId) throws Exception {
+		log.debug("LOGINUSER: {}", loginUser);
+
 		try {
 			qnaService.deleteQuestion(questionId, loginUser);
 			return Result.ok();

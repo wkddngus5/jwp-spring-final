@@ -2,6 +2,8 @@ package next.controller.qna;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,7 @@ import next.service.QnaService;
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
+	private static final Logger log = LoggerFactory.getLogger(QuestionController.class);
 	@Autowired
 	private QuestionDao questionDao;
 	@Autowired
@@ -64,6 +67,8 @@ public class QuestionController {
 
 	@RequestMapping(value = "/{questionId}", method = RequestMethod.DELETE)
 	public String delete(@LoginUser User loginUser, @PathVariable long questionId, Model model) throws Exception {
+		log.debug("LOGINUSER: {}", loginUser);
+		
 		try {
 			qnaService.deleteQuestion(questionId, loginUser);
 			return "redirect:/";

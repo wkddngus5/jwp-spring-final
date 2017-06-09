@@ -2,6 +2,7 @@ package next.service;
 
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
+import static io.restassured.RestAssured.*;
 
 import java.util.Date;
 
@@ -12,27 +13,62 @@ import next.model.Answer;
 import next.model.Question;
 import next.model.User;
 
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 
 import com.google.common.collect.Lists;
 
 @RunWith(MockitoJUnitRunner.class)
 public class QnaServiceTest {
+	private static final Logger log = LoggerFactory.getLogger(QnaServiceTest.class);
+
 	@Mock
     private QuestionDao questionDao;
     @Mock
     private AnswerDao answerDao;
     
     private QnaService qnaService;
+    User loginUser = new User("s", "s", "자바지기", "admin@slipp.net");
 
     @Before
     public void setup() {
+    	RestAssured.port = 8080;
     	qnaService = new QnaService(questionDao, answerDao);
+    }
+    
+    @Test
+    public void create() throws Exception {
+      given()
+          .auth().preemptive().basic(loginUser.getUserId(), loginUser.getPassword())
+          .contentType(ContentType.HTML)
+      .when()
+          .post("/")
+      .then()
+          .statusCode(200);
+    }
+    
+    @Test
+    public void delete() {
+    	
+    	String body = given()
+    		.auth().preemptive().basic(loginUser.getUserId(), loginUser.getPassword())
+    		.contentType(ContentType.JSON)
+    	.when()
+    		.delete("/questions/11")
+    	.then()
+    		.statusCode(200)
+    		.extract()
+    		.asString();
+    	log.debug("body: {}", body);
     }
     
     @Test(expected = EmptyResultDataAccessException.class)

@@ -119,6 +119,16 @@ INSERT INTO QUESTIONS (questionId, writer, title, contents, createdDate, countOf
 그런데 위 내용은 스레드에 안전하지 않기 때문에 람다 표현식에서 변수 값을 변경하는 것을 막는다고 이야기하고 있다. 왜 스레드에 안전하지 않은 것일까?',
 CURRENT_TIMESTAMP(), 3);
 
+INSERT INTO QUESTIONS (questionId, writer, title, contents, createdDate, countOfAnswer) VALUES
+(11, 's',
+'anonymous inner class는 final 변수에만 접근해야 하는 이유는?', 
+'오늘 자바 8에 추가된 람다와 관련한 내용을 읽다가 다음과 같이 내용이 있어 궁금증이 생겼다.
+람다 표현식에서 변수를 변경하는 작업은 스레드에 안전하지 않다. - 가장 빨리 만나는 자바8 28페이지...
+람다 표현식을 이전 버전의 anonymous inner class와 같은 용도로 판단했을 때 기존의 anonymous inner class에서도 final 변수에만 접근할 수 있었다.
+지금까지 anonymous inner class에서 final 변수로 정의하는 이유가 현재 method의 Context가 anonymous inner class 인스턴스까지 확대되기 때문에 anonymous inner class 내에서 값을 변경할 경우 그에 따른 side effect가 생길 가능성이 많아 final로 정의하는 것으로 생각했다.
+그런데 위 내용은 스레드에 안전하지 않기 때문에 람다 표현식에서 변수 값을 변경하는 것을 막는다고 이야기하고 있다. 왜 스레드에 안전하지 않은 것일까?',
+CURRENT_TIMESTAMP(), 0);
+
 INSERT INTO ANSWERS (writer, contents, createdDate, questionId) VALUES
 ('jhindhal.jhang',
 'Thread safe 랑 final은 관계가 있는거지만 다르게 봐야 하는게 아닌가?
