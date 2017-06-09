@@ -18,3 +18,8 @@ HomeController에서는 index.jsp파일과 DB에 있는 Questions를 찾아서
 modelAndView에 담아 다시 필터를 거친 후 응답해준다.  
 
 #### 6. QuestionController가 multi thread에서 문제가 되는 이유를 설명하시오.
+QuestionController instance는 하나이기 때문에 
+QuestionController가 가지고 있는 
+private Question question, private List<Answer> answers도 
+하나 밖에 존재하지 않는다. 그렇게 되면 multi thread로 동시에 여러 메서드가 
+동일한 question, answers에 접근하게 되어 오류가 발생할 수 있다.
