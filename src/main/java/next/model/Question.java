@@ -1,8 +1,11 @@
 package next.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.Size;
+
+import next.CannotOperateException;
 
 public class Question {
 	private long questionId;
@@ -78,6 +81,10 @@ public class Question {
 		return countOfComment;
 	}
 	
+	public boolean isDeleted() {
+		return deleted;
+	}
+	
 	public Question newQuestion(User user) {
 		return new Question(user.getUserId(), title, contents);
 	}
@@ -89,6 +96,17 @@ public class Question {
 	public void update(Question newQuestion) {
 		this.title = newQuestion.title;
 		this.contents = newQuestion.contents;
+	}
+	
+	public void delete(User user, List<Answer> answers) throws CannotOperateException {
+		if (!isSameUser(user)) {
+            throw new CannotOperateException("다른 사용자가 쓴 글을 수정할 수 없습니다.");
+        }
+		
+		for (Answer answer : answers) {
+			answer.delete(user);
+		}
+		this.deleted = true;
 	}
 
 	@Override

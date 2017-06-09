@@ -39,9 +39,8 @@ public class QnaService {
         	throw new EmptyResultDataAccessException("존재하지 않는 질문입니다.", 1);
         }
         
-        if (!question.isSameUser(user)) {
-            throw new CannotOperateException("다른 사용자가 쓴 글을 수정할 수 없습니다.");
-        }
+        List<Answer> answers = findAllByQuestionId(questionId);
+        question.delete(user, answers);
         questionDao.delete(questionId);
 	}
 
@@ -63,10 +62,6 @@ public class QnaService {
 		Answer answer = answerDao.findById(answerId);
 		if (answer == null) {
 			throw new EmptyResultDataAccessException("존재하지 않는 질문입니다.", 1);
-		}
-		
-		if (!answer.isSameUser(loginUser)) {
-			throw new CannotOperateException("다른 사용자가 쓴 글을 수정할 수 없습니다.");
 		}
 		answerDao.delete(answerId);
 		questionDao.minusCountOfAnswer(answer.getQuestionId());

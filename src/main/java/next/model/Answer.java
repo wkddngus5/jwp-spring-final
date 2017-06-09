@@ -5,6 +5,8 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import next.CannotOperateException;
+
 public class Answer {
 	private static final Logger log = LoggerFactory.getLogger(Answer.class);
 
@@ -63,6 +65,10 @@ public class Answer {
 		return user.isSameUser(this.writer);
 	}
 	
+	public boolean isDeleted() {
+		return deleted;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -90,5 +96,12 @@ public class Answer {
 		return "Answer [answerId=" + answerId + ", writer=" + writer
 				+ ", contents=" + contents + ", createdDate=" + createdDate
 				+ ", questionId=" + questionId + "]";
+	}
+
+	public void delete(User user) throws CannotOperateException {
+		if (!isSameUser(user)) {
+			throw new CannotOperateException("다른 사용자가 쓴 글을 수정할 수 없습니다.");
+		}
+		this.deleted = true;
 	}
 }
