@@ -61,11 +61,12 @@ public class QnaServiceTest {
     	
     	String body = given()
     		.auth().preemptive().basic(loginUser.getUserId(), loginUser.getPassword())
-    		.contentType(ContentType.JSON)
+    		.param("_method", "delete")
+    		.contentType(ContentType.HTML)
     	.when()
-    		.delete("/questions/11")
+    		.post("/questions/11")
     	.then()
-    		.statusCode(200)
+    		.statusCode(302)
     		.extract()
     		.asString();
     	log.debug("body: {}", body);
