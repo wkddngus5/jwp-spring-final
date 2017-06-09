@@ -4,7 +4,11 @@
 
 ## 질문에 대한 답변
 #### 2. Tomcat 서버를 시작 과정을 설명하시오.
-
+Servlet Container인  Tomcat은 
+AppConfig.java에 있는 ComponentScan을 통해 class들을 읽어서 
+이들 중 servlet의 requestmapping 애노테이션이 있는 method를 찾아
+map에 각 요청 url에 따라 method를 저장해놓고, DB연결 등 초기화를 마친 후
+클라이언트의 요청을 기다린다.
 
 #### 3. http://localhost:8080 으로 요청했을 때의 과정을 설명하시오.
 
